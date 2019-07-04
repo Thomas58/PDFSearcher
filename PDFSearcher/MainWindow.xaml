@@ -1,0 +1,64 @@
+﻿<Window x:Class="PDFSearcher.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:PDFSearcher"
+        xmlns:ViewModel="clr-namespace:PDFSearcher.ViewModel"
+        xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+        xmlns:cmd="clr-namespace:GalaSoft.MvvmLight.Command;assembly=GalaSoft.MvvmLight.Platform"
+        mc:Ignorable="d"
+        Title="PDF Searcher" Height="350" Width="700">
+    <Window.DataContext>
+        <ViewModel:MainViewModel/>
+    </Window.DataContext>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="28"/>
+            <RowDefinition Height="28"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+
+        <Grid Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="70"/>
+                <ColumnDefinition Width="70"/>
+            </Grid.ColumnDefinitions>
+            <TextBox Grid.Column="0" Text="" IsReadOnly="False" HorizontalAlignment="Stretch" x:Name="searchInput"/>
+            <Button Grid.Column="1" Content="Search" Command="{Binding searchCommand}" CommandParameter="{Binding Text, ElementName=searchInput}" IsDefault="{Binding IsFocused, ElementName=searchInput}" Width="70"/>
+            <Button Grid.Column="2" Content="Open" Command="{Binding openfilesCommand}" Width="70"/>
+        </Grid>
+
+        <Label Grid.Row="1" Content="Documents:" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="White" BorderBrush="Black" BorderThickness="1"/>
+        <ListBox Grid.Column="0" Grid.Row="2" Grid.RowSpan="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ItemsSource="{Binding Collections}" SelectedIndex="{Binding SelectedIndex}">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="{Binding Matches}"/>
+                        <TextBlock Text="{Binding File}" Padding="5,0,0,0"/>
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+
+        <Label Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="2" Content="Matches:" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="White" BorderBrush="Black" BorderThickness="1"/>
+        <ListBox Grid.Column="1" Grid.Row="2" Grid.RowSpan="2" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ItemsSource="{Binding CurrentDocument.Lines}">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="{Binding PageNumber}"/>
+                        <TextBlock Text="{Binding LineNumber}" Padding="5,0,0,0"/>
+                        <TextBlock Text="{Binding Text}" Padding="5,0,0,0"/>
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+
+    </Grid>
+</Window>
